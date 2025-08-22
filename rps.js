@@ -20,59 +20,70 @@ function getHumanChoice(){
     return choice;
 }
 
-function playRound(humanChoice, computerChoice){
-      if (humanChoice === computerChoice) {
-        console.log("It's a tie!")
+function playRound(humanChoice, computerChoice) {
+    const cScore = document.getElementById("computerScore");
+    const hScore = document.getElementById("humanScore");
+    const result = document.getElementById("result");
+
+    if (humanChoice === computerChoice) {
+        result.textContent = "It's a tie!";
+        return;
     }
+
     switch(humanChoice) {
         case "rock":
             if (computerChoice === "scissors") {
                 humanScore++;
-                console.log("You win! Rock beats Scissors.");
-                return;
-            } else if (computerChoice === "paper") {
+                result.textContent = "You win! Rock beats Scissors.";
+            } else {
                 computerScore++;
-                console.log("You lose! Paper beats Rock.");
-                return;
+                result.textContent = "You lose! Paper beats Rock.";
             }
             break;
 
         case "paper":
             if (computerChoice === "rock") {
                 humanScore++;
-                console.log("You win! Paper beats Rock.");
-                return;
-            } else if (computerChoice === "scissors") {
+                result.textContent = "You win! Paper beats Rock.";
+            } else {
                 computerScore++;
-                console.log("You lose! Scissors beats Paper.");
-                return;
+                result.textContent = "You lose! Scissors beats Paper.";
             }
             break;
 
         case "scissors":
             if (computerChoice === "paper") {
                 humanScore++;
-                console.log("You win! Scissors beats Paper.");
-                return;
-            } else if (computerChoice === "rock") {
+                result.textContent = "You win! Scissors beats Paper.";
+            } else {
                 computerScore++;
-                console.log("You lose! Rock beats Scissors.");
-                return;
+                result.textContent = "You lose! Rock beats Scissors.";
             }
             break;
 
         default:
-            console.log("Invalid human choice!");
+            result.textContent = "Invalid choice!";
             return;
     }
+
+    hScore.textContent = "Human: " + humanScore;
+    cScore.textContent = "Computer: " + computerScore;
 }
 
-const computerChoice = getComputerChoice().toLowerCase();
-const humanChoice =  getHumanChoice().toLowerCase();
-
-for (let i = 0; i < 5; i++){
-    const humanChoice =  getHumanChoice().toLowerCase();
-    const computerChoice = getComputerChoice().toLowerCase();
-    playRound(humanChoice, computerChoice)
-    console.log("Human: " + humanScore + " | " + "Computer: " + computerScore);
-}
+const btns = document.querySelectorAll("button");
+btns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+        playRound(btn.id, getComputerChoice());
+        if (humanScore >= 5 || computerScore >= 5){
+            btns.forEach((btn) => {
+                btn.disabled = true;
+                if (humanScore >= 5){
+                    result.textContent = "Human wins";
+                }
+                else {
+                    result.textContent = "Computer wins";
+                }
+            });
+        }
+    });
+});
